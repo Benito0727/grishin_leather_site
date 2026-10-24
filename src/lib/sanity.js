@@ -14,6 +14,7 @@ export function imageUrlFor(source) {
   return builder.image(source).url()
 }
 
+
 export async function getProducts() {
   const query = `*[_type == "product" && isAvailable == true] | order(_createdAt desc) {
     _id,
