@@ -1,0 +1,162 @@
+<div class="modal-overlay" id="productModal">
+  <div class="modal-content">
+    <button class="modal-close">✕</button>
+    
+    <div class="gallery-container">
+      <div class="gallery-images" id="modalGallery"></div>
+      <button class="gallery-nav prev">‹</button>
+      <button class="gallery-nav next">›</button>
+      <div class="gallery-dots" id="galleryDots"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(43, 29, 22, 0.85);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+
+  .modal-overlay.show {
+    display: flex;
+  }
+
+  .modal-content {
+    background: #fffaf3;
+    border-radius: 24px;
+    width: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(43, 29, 22, 0.3);
+    overflow: hidden;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 250, 243, 0.9);
+    color: #2b1d16;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.15s ease;
+  }
+
+  .modal-close:hover {
+    background: white;
+  }
+
+  .gallery-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px 20px;
+    min-height: 500px;
+    min-width: 600px;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-container {
+      min-height: 300px;
+      min-width: auto;
+      padding: 40px 10px 10px;
+    }
+  }
+
+  .gallery-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 450px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-images {
+      min-height: 250px;
+    }
+  }
+
+  .gallery-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    -webkit-outline: none;
+  }
+
+  .gallery-image.active {
+    display: block;
+  }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 250, 243, 0.9);
+    color: #2b1d16;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 5;
+  }
+
+  .gallery-nav.prev {
+    left: 16px;
+  }
+
+  .gallery-nav.next {
+    right: 16px;
+  }
+
+  .gallery-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(43, 29, 22, 0.3);
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: #2b1d16;
+  }
+</style>

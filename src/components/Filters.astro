@@ -1,0 +1,109 @@
+---
+export interface Props {
+  categories: string[];
+  selectedCategory?: string | null;
+}
+
+const { categories, selectedCategory = null } = Astro.props;
+
+const categoryNames: Record<string, string> = {
+  'accessories': 'Аксессуары',
+  'belts': 'Ремни',
+  'wallets': 'Кошельки',
+  'bags': 'Сумки',
+  'covers': 'Обложки',
+};
+
+function getCategoryName(category: string): string {
+  return categoryNames[category] || category;
+}
+---
+
+<div class="filters">
+  <button 
+    class:list={["filter-btn", "all", { active: !selectedCategory }]}
+    data-category="all"
+  >
+    Все товары
+  </button>
+  {categories.map((category) => (
+    <button
+      class:list={["filter-btn", { active: selectedCategory === category }]}
+      data-category={category}
+    >
+      {getCategoryName(category)}
+    </button>
+  ))}
+</div>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const productCards = document.querySelectorAll('.card');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const selectedCategory = this.getAttribute('data-category');
+        
+        // Обновляем активную кнопку
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Фильтруем карточки
+        productCards.forEach(card => {
+          const cardCategory = card.getAttribute('data-category');
+          
+          if (selectedCategory === 'all' || cardCategory === selectedCategory) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    padding: 12px 24px;
+    border: 2px solid #e4d4c3;
+    background: #fffaf3;
+    color: #2b1d16;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    background: #efe2d4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(43, 29, 22, 0.15);
+  }
+
+  .filter-btn.active {
+    background: #2b1d16;
+    color: #f5e7d0;
+    border-color: #2b1d16;
+  }
+
+  .filter-btn.all {
+    background: #8b6a55;
+    color: white;
+    border-color: #8b6a55;
+  }
+
+  .filter-btn.all:hover {
+    background: #6b5245;
+  }
+</style>

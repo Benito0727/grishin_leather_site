@@ -1,0 +1,141 @@
+---
+export interface Props {
+  telegram?: string;
+  whatsapp?: string;
+  max?: string;
+}
+
+const { telegram, whatsapp, max } = Astro.props;
+
+// Форматируем ссылки
+const telegramUrl = telegram 
+  ? (telegram.startsWith('http') ? telegram : `https://t.me/${telegram.replace('@', '')}`)
+  : null;
+
+const whatsappUrl = whatsapp 
+  ? (whatsapp.startsWith('http') ? whatsapp : `https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`)
+  : null;
+
+const maxUrl = max || null;
+---
+
+<div class="contact-wrapper">
+  <button class="btn btn-info" onclick="toggleDropdown(this)">
+    Написать мастеру
+  </button>
+  <div class="dropdown">
+    {telegramUrl && (
+      <a href={telegramUrl} target="_blank" rel="noopener noreferrer">
+        📱 Telegram
+      </a>
+    )}
+    {whatsappUrl && (
+      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+         WhatsApp
+      </a>
+    )}
+    {maxUrl && (
+      <a href={maxUrl} target="_blank" rel="noopener noreferrer">
+        ✉️ Макс
+      </a>
+    )}
+    {!telegramUrl && !whatsappUrl && !maxUrl && (
+      <span class="no-contacts">Контакты не указаны</span>
+    )}
+  </div>
+</div>
+
+<script is:inline>
+  function toggleDropdown(button) {
+    const wrapper = button.closest('.contact-wrapper');
+    const dropdown = wrapper.querySelector('.dropdown');
+    const isOpen = dropdown.classList.contains('show');
+    
+    // Закрываем все дропдауны
+    document.querySelectorAll('.dropdown.show').forEach(d => d.classList.remove('show'));
+    
+    // Открываем текущий, если он был закрыт
+    if (!isOpen) {
+      dropdown.classList.add('show');
+    }
+  }
+
+  // Закрываем при клике вне
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.contact-wrapper')) {
+      document.querySelectorAll('.dropdown.show').forEach(d => d.classList.remove('show'));
+    }
+  });
+</script>
+
+<style>
+  .contact-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+  .btn-info {
+    background: #efe2d4;
+    color: #5d473b;
+  }
+
+  .dropdown {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    min-width: 180px;
+    background: white;
+    border: 1px solid #e4d4c3;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 -4px 12px rgba(43, 29, 22, 0.15);
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 100;
+  }
+
+  .dropdown.show {
+    display: flex;
+  }
+
+  .dropdown a {
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #2b1d16;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s ease;
+  }
+
+  .dropdown a:hover {
+    background: #f7f1e8;
+  }
+
+  .no-contacts {
+    padding: 10px 12px;
+    color: #8b6a55;
+    font-size: 14px;
+    font-style: italic;
+  }
+</style>

@@ -1,0 +1,13 @@
+---
+export interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const { title = 'Мастерская кожаных изделий', subtitle = 'Изделия ручной работы. Наличие уточняйте на маркетплейсах.' } = Astro.props;
+---
+
+<header>
+  <h1>{title}</h1>
+  <p>{subtitle}</p>
+</header>
